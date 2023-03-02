@@ -14,7 +14,7 @@ It will detail processes for:
 
 <h2 id="nginx">Setup and Configuration of nginx</h2>
 
-**Step 1:** Install nginx
+**Step 1: Install nginx**
 
 ```
 sudo apt-get install nginx
@@ -22,7 +22,7 @@ sudo apt-get install nginx
 
 Once installed, a directory located at `/etc/nginx` will be populated with files for configuration.
 
-**Step 2:** Modify nginx Configuration for Epicbox
+**Step 2: Modify nginx Configuration for Epicbox**
 
 1. Open file located at `/etc/nginx/sites-enabled/default`:
 
@@ -71,13 +71,13 @@ Next, we will generate our SSL certificates using `certbot` by letsencrypt.  If 
 
 <h2 id="ssl">Generate and Configure SSL</h2>
 
-**Step 1:** Install `certbot`, create symbolic link for `certbot` command
+**Step 1: Install `certbot`, create symbolic link for `certbot` command**
 
 ```
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 ```
-**Step 2:** Stop `nginx` service if it is running
+**Step 2: Stop `nginx` service if it is running**
 
 Certbot requires an open port at 80, with no other processes using it, for communication with the Let's Encrypt API.  Nginx automatically starts, and is running on port 80 after install, so we need to stop the service.
 
@@ -85,21 +85,21 @@ Certbot requires an open port at 80, with no other processes using it, for commu
 sudo systemctl stop nginx
 ```
 
-**Step 3:** Add DNS A Record for your chosen domain
+**Step 3: Add DNS A Record for your chosen domain**
 
 Through your hosting provider, Cloudflare, etc, configure your DNS settings to have a subdomain (i.e. epicbox.epic.tech), and point the A record to your server's IP address.
 
 Steps required to do this will not be covered here.
 
 
-**Step 4:** Generate SSL certificate, and relevant files
+**Step 4: Generate SSL certificate, and relevant files**
 
 ```
 sudo certbot certonly --standalone -d <domain>
 ```
 This will generate SSL certificate files and place them in `/etc/letsencrypt/<domain>/` directory.
 
-**Step 5:** Retrieve `options-ssl-nginx.conf` file from certbot GitHub (step not needed if you used `nginx` option during certificate generation).
+**Step 5: Retrieve `options-ssl-nginx.conf` file from certbot GitHub (step not needed if you used `nginx` option during certificate generation).**
 
 If you don't have `wget` installed, do so with `sudo apt-get install wget`
 
@@ -108,7 +108,7 @@ wget https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/cert
 sudo mv ./options-ssl-nginx.conf /etc/letsencrypt/
 ```
 
-**Step 6:** Generate Diffie-Hellman params with `openssl`
+**Step 6: Generate Diffie-Hellman params with `openssl`**
 
 If you don't have openssl installed, do so with `sudo apt-get install openssl`
 
@@ -119,7 +119,7 @@ sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
 ```
 You may optionally increase `2048` value to `3072` for added security.
 
-**Step 7:** Finally, start restart your `nginx` service
+**Step 7: Finally, start restart your `nginx` service**
 
 ```
 sudo systemctl restart nginx.service
@@ -131,7 +131,7 @@ You can also do this with `sudo /etc/init.d/nginx restart`.
 
 <h2 id="epicbox">Setup and Configure Epicbox</h2>
 
-**Step 1:** Install dependencies
+**Step 1: Install dependencies**
 
 1. Install `rustup` from https://rustup.rs/.
   - Rust toolchains up to `1.61` are confirmed to be functional.  Anything newer has not been tested and may result in issues.
@@ -142,7 +142,7 @@ You can also do this with `sudo /etc/init.d/nginx restart`.
 rabbitmq-plugins enable rabbitmq_stomp
 ```
 
-**Step 2:** Clone & build your desired epicbox repo/branch
+**Step 2: Clone & build your desired epicbox repo/branch**
 
 In this step, we'll be using my personal fork of `epicbox` and will clone a branch awaiting PR merge, with a fix for domain discernment.
 
@@ -154,7 +154,7 @@ cd epicbox
 cargo build --release
 ```
 
-**Step 3:** Run `epicbox`
+**Step 3: Run `epicbox`**
 
 This step is best performed in a `tmux` session or similar, so that logs can be more easily analyzed when printed to stdout.
 

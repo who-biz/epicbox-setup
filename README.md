@@ -1,4 +1,4 @@
-# Setting Up Epicbox for Epic Cash Blockchain & Wallets
+# Setting Up Epicbox for Epic Cash
 
 The goal of this document is to provide an easily readable and reproducible workflow for setting up Epicbox at a domain of the operator's choice.
 

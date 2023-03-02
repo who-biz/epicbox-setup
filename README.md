@@ -6,9 +6,10 @@ This document assumes operator is running Ubuntu 20.04.
 
 It will detail processes for:
 
-1. [Setup and configuration of an `nginx`](#nginx) webserver/reverse proxy for use with websockets
+1. [Setup and configuration of `nginx`](#nginx) webserver/reverse proxy for use with websockets
 2. [SSL certificate generation using `certbot`](#ssl)
-3. [Building from source, and running, an instance of `epicbox`](#epicbox).
+3. [Build `epic-wallet` from source, listen for `epicbox`](#epic-wallet)
+4. [Build `epicbox` from source, and launch](#epicbox)
 
 ---
 
@@ -126,6 +127,43 @@ sudo systemctl restart nginx.service
 ```
 
 You can also do this with `sudo /etc/init.d/nginx restart`.
+
+---
+
+<h2 id="epic-wallet">Setup and Configure Epic-Wallet for Epicbox</h2>
+
+**Step 1: Clone and Build `epic-wallet` from source**
+
+We will use my personal repository here, since it has a commit awaiting PR merge for a fix.
+
+First, clone repository and branch of your choice:
+
+```
+git clone https://github.com/who-biz/epic-wallet.git --branch epicbox-address
+cd epic-wallet
+cargo build --release
+```
+Wait for `epic-wallet` to compile.
+
+**Step 2: Run `epic-wallet` in listening mode with `epicbox` method**
+
+Once that is finished building, we will want to run `epic-wallet` in listening mode.  The most effective way to do this is with a `tmux` session or similar tool, so we can analyze stdout logs as well as logging to file.
+
+
+To start a new `tmux` session: `tmux new -s epic-wallet`
+
+
+Once in the session, we can start our epic wallet:
+
+```
+cd epic-wallet/target/release
+./epic-wallet listen -m epicbox -i 5
+```
+The `-i 5` argument specifies a 5 second refresh interval for epicbox listener.
+
+You can then detach from this session with `Ctrl+B` then `D`.
+
+If you need to re-attach to this session, `tmux a -t epic-wallet` will get you back in.
 
 ---
 

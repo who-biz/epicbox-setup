@@ -6,9 +6,9 @@ This document assumes operator is running Ubuntu 20.04.
 
 It will detail processes for:
 
-1. Setup and configuration of an `nginx` webserver/reverse proxy for use with websockets
-2. SSL certificate generation using `certbot`
-3. Building from source, and running, an instance of `[epicbox](https://github.com/EpicCash/epicbox)`.
+1. [Setup and configuration of an `nginx`](#nginx) webserver/reverse proxy for use with websockets
+2. [SSL certificate generation using `certbot`](#ssl)
+3. [Building from source, and running, an instance of `epicbox`](#epicbox).
 
 ---
 
@@ -131,3 +131,38 @@ You can also do this with `sudo /etc/init.d/nginx restart`.
 
 <h2 id="epicbox">Setup and Configure Epicbox</h2>
 
+**Step 1:** Install dependencies
+
+1. Install `rustup` from https://rustup.rs/.
+  - Rust toolchains up to `1.61` are confirmed to be functional.  Anything newer has not been tested and may result in issues.
+2. Install `rabbitmq`
+  - This step is best completed by using the **Cloudsmith Quick Start Script**, located here: https://www.rabbitmq.com/install-debian.html#apt-cloudsmith
+3. Enable STOMP Plugin for RabbitMQ:
+```
+rabbitmq-plugins enable rabbitmq_stomp
+```
+
+**Step 2:** Clone & build your desired epicbox repo/branch
+
+In this step, we'll be using my personal fork of `epicbox` and will clone a branch awaiting PR merge, with a fix for domain discernment.
+
+The official Epic Cash Epicbox repository is [located here](https://github.com/EpicCash/epicbox).
+
+```
+git clone https://github.com/who-biz/epicbox.git --branch ws-localhost-fix
+cd epicbox
+cargo build --release
+```
+
+**Step 3:** Run `epicbox`
+
+This step is best performed in a `tmux` session or similar, so that logs can be more easily analyzed when printed to stdout.
+
+To start a tmux session: `tmux new -s epicbox`
+
+Once in session, navigate to directory containing epicbox binary, and launch it.  Be sure to replace `<domain>` with your information, omitting brackets:
+
+```
+cd epicbox/target/release
+RUST_LOG=debug EPICBOX_DOMAIN=<domain> BIND_ADDRESS=0.0.0.0:3423 ./epicbox
+```

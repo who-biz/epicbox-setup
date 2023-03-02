@@ -145,7 +145,22 @@ cargo build --release
 ```
 Wait for `epic-wallet` to compile.
 
-**Step 2: Run `epic-wallet` in listening mode with `epicbox` method**
+**Step 2: Change epicbox-related settings in `epic-wallet.toml`**
+
+In your generated `epic-wallet.toml` configuration file, you should see the following `epicbox`-related settings:
+
+```
+[epicbox]
+epicbox_domain = "epicbox.epic.tech"
+epicbox_port = 443
+epicbox_protocol_unsecure = false
+epicbox_address_index = 0
+epicbox_listener_interval = 5
+```
+
+Modify these to suit your needs, before launching `epic-wallet`.
+
+**Step 3: Run `epic-wallet` in listening mode with `epicbox` method**
 
 Once that is finished building, we will want to run `epic-wallet` in listening mode.  The most effective way to do this is with a `tmux` session or similar tool, so we can analyze stdout logs as well as logging to file.
 

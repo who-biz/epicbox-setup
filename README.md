@@ -192,8 +192,10 @@ If you need to re-attach to this session, `tmux a -t epic-wallet` will get you b
   - This step is best completed by using the **Cloudsmith Quick Start Script**, located here: https://www.rabbitmq.com/install-debian.html#apt-cloudsmith
 3. Enable STOMP Plugin for RabbitMQ:
 ```
-rabbitmq-plugins enable rabbitmq_stomp
+sudo rabbitmq-plugins enable rabbitmq_stomp
 ```
+
+Ensure the above stomp plugin is running, or your epicbox will experience `Connection Refused` errors.
 
 **Step 2: Clone & build your desired epicbox repo/branch**
 
